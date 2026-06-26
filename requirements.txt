@@ -1,0 +1,13 @@
+# Data Manipulation & Analysis
+numpy
+pandas
+
+# Machine Learning & Pipelines
+scikit-learn
+joblib
+
+# Visualization
+matplotlib
+seaborn
+fastapi
+pydantic
