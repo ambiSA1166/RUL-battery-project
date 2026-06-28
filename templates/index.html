@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Battery RUL Predictor</title>
+    <title>Battery RUL Dashboard</title>
     <style>
         :root {
             --primary: #2ecc71;
@@ -25,7 +25,7 @@
         }
 
         .container {
-            max-width: 650px;
+            max-width: 750px;
             width: 100%;
         }
 
@@ -44,19 +44,74 @@
             gap: 10px;
         }
 
+        h3 {
+            margin: 0 0 10px 0;
+            font-size: 1rem;
+            color: #2c3e50;
+        }
+
         .subtitle {
             color: var(--text-light);
             font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+
+        .project-tag {
+            font-size: 0.85rem;
+            color: #34495e;
+            background-color: #ebf5fb;
+            border-left: 3px solid #3498db;
+            padding: 6px 12px;
+            border-radius: 0 4px 4px 0;
+            margin-bottom: 15px;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        /* Bordered Container Style */
+        .project-summary-box {
+            background-color: #f4fbf7; /* Light premium mint tint */
+            border: 1px solid #c2ebd3; /* Clean green-tinted border */
+            border-left: 5px solid var(--primary); /* Deep green accent bar */
+            border-radius: 8px;
+            padding: 20px;
             margin-bottom: 25px;
+        }
+
+        .summary-text {
+            margin: 0 0 15px 0;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            color: #2c3e50;
+        }
+
+        .feature-guide-list {
+            margin: 0 0 15px 0;
+            padding-left: 20px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: #34495e;
+        }
+
+        .feature-guide-list li {
+            margin-bottom: 6px;
+        }
+
+        .summary-footer {
+            font-size: 0.88rem;
+            color: #27ae60;
+            font-weight: 500;
+            border-top: 1px dashed #c2ebd3;
+            padding-top: 10px;
         }
 
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 20px;
         }
 
-        @media (max-width: 500px) {
+        @media (max-width: 600px) {
             .form-grid { grid-template-columns: 1fr; }
         }
 
@@ -70,7 +125,7 @@
             grid-column: span 2;
         }
 
-        @media (max-width: 500px) {
+        @media (max-width: 600px) {
             .input-group.full-width { grid-column: span 1; }
         }
 
@@ -93,6 +148,13 @@
             border-color: var(--primary);
         }
 
+        .input-hint {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 2px;
+            line-height: 1.3;
+        }
+
         button {
             margin-top: 25px;
             width: 100%;
@@ -112,8 +174,8 @@
         }
 
         #result-box {
-            margin-top: 25px;
-            padding: 20px;
+            margin-top: 30px;
+            padding: 25px;
             border-radius: 8px;
             background-color: #f8f9fa;
             border-left: 5px solid var(--primary);
@@ -122,13 +184,18 @@
 
         .result-title {
             font-weight: bold;
-            font-size: 1.2rem;
-            margin-bottom: 10px;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+
+        .analytics-text {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .analytics-item {
-            font-size: 0.9rem;
-            margin: 4px 0;
+            font-size: 0.95rem;
             color: var(--text-light);
         }
 
@@ -136,44 +203,81 @@
             color: var(--text);
             font-weight: 600;
         }
+
+        .disclaimer-section {
+            font-size: 0.8rem;
+            color: #95a5a6;
+            border-top: 1px solid #eaeded;
+            padding-top: 15px;
+            margin-top: 30px;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="card">
-        <h2>🔋 Battery RUL Diagnostic Panel</h2>
-        <p class="subtitle">Enter telemetry sensor parameters below to calculate remaining operational cycles.</p>
+        <h2>🔋Lithium-Ion Battery Remaining Useful Life (RUL) Predictor</h2>
+        <p class="subtitle">Fill in the battery details below to check how many cycles it has left.</p>
+        
+        <div class="project-summary-box">
+            <p class="summary-text">
+                📌 <strong>About This Project:</strong> Imagine trying to figure out how healthy a rechargeable battery is without tearing it open. This project uses machine learning to do exactly that! By tracking simple time and voltage details from just one routine charge and discharge cycle, our system builds a digital "fingerprint" of the battery to predict exactly how many more life cycles it has left before wearing out.
+            </p>
+            
+            <h3>🔍 What the Inputs Mean:</h3>
+            <ul class="feature-guide-list">
+                <li><strong>Discharge Time:</strong> Total time (in seconds) the battery lasted under use before running empty.</li>
+                <li><strong>Decrement Range:</strong> Time taken for the battery voltage to drop through its busiest working range (3.6V down to 3.4V). Weak cells drop much faster.</li>
+                <li><strong>Max. Voltage Discharge:</strong> The peak voltage measured right at the beginning of the discharge cycle.</li>
+                <li><strong>Min. Voltage Charge:</strong> The lowest voltage measured right before the battery was plugged into a charger.</li>
+                <li><strong>Time at 4.15V:</strong> Seconds the battery spent resting at a high, near-full voltage state.</li>
+                <li><strong>Time Constant Current:</strong> Duration of the high-speed charging mode before the charger slowed down to top it off safely.</li>
+                <li><strong>Total Charging Time:</strong> The total time (in seconds) required to charge the cell back to 100%.</li>
+            </ul>
+
+            <div class="summary-footer">
+                🚀 <strong>Let's predict how long your battery stays alive!</strong>
+            </div>
+        </div>
         
         <form id="prediction-form">
             <div class="form-grid">
                 <div class="input-group">
                     <label>Discharge Time (s)</label>
-                    <input type="number" step="any" id="discharge_time" value="2150.0" required>
+                    <input type="number" step="any" id="discharge_time" min="0.01" value="2150.0" required>
+                    <span class="input-hint">Must be greater than 0 (Expected range: 1000.0 to 4000.0)</span>
                 </div>
                 <div class="input-group">
                     <label>Decrement 3.6-3.4V (s)</label>
-                    <input type="number" step="any" id="decrement_range" value="1150.0" required>
+                    <input type="number" step="any" id="decrement_range" min="0.0" value="1150.0" required>
+                    <span class="input-hint">Must be 0 or greater (Expected range: 200.0 to 2500.0)</span>
                 </div>
                 <div class="input-group">
                     <label>Max. Voltage Discharge (V)</label>
-                    <input type="number" step="any" id="max_voltage_discharge" value="4.02" required>
+                    <input type="number" step="any" id="max_voltage_discharge" min="2.01" max="4.99" value="4.02" required>
+                    <span class="input-hint">Accepts values strictly between 2.0V and 5.0V</span>
                 </div>
                 <div class="input-group">
                     <label>Min. Voltage Charge (V)</label>
-                    <input type="number" step="any" id="min_voltage_charge" value="3.36" required>
+                    <input type="number" step="any" id="min_voltage_charge" min="1.01" max="4.99" value="3.36" required>
+                    <span class="input-hint">Accepts values strictly between 1.0V and 5.0V</span>
                 </div>
                 <div class="input-group">
                     <label>Time at 4.15V (s)</label>
-                    <input type="number" step="any" id="time_at_voltage_threshold" value="20.0" required>
+                    <input type="number" step="any" id="time_at_voltage_threshold" min="0.0" value="20.0" required>
+                    <span class="input-hint">Must be 0 or greater (Expected range: 0.0 to 500.0)</span>
                 </div>
                 <div class="input-group">
                     <label>Time Constant Current (s)</label>
-                    <input type="number" step="any" id="time_constant_current" value="620.0" required>
+                    <input type="number" step="any" id="time_constant_current" min="0.0" value="620.0" required>
+                    <span class="input-hint">Must be 0 or greater (Expected range: 100.0 to 2000.0)</span>
                 </div>
                 <div class="input-group full-width">
                     <label>Total Charging Time (s)</label>
-                    <input type="number" step="any" id="charging_time" value="5100.0" required>
+                    <input type="number" step="any" id="charging_time" min="0.01" value="5100.0" required>
+                    <span class="input-hint">Must be greater than 0 (Expected range: 2000.0 to 10000.0)</span>
                 </div>
             </div>
             
@@ -182,9 +286,19 @@
 
         <div id="result-box">
             <div class="result-title">Predicted Life: <span id="predicted-val" style="color: var(--primary-dark);">--</span> cycles</div>
-            <div class="analytics-item">95% Confidence Interval: <span id="ci-val" class="highlight">--</span></div>
-            <div class="analytics-item">Margin of Error: <span id="me-val" class="highlight">--</span></div>
-            <div class="analytics-item">Forest Disagreement Std: <span id="std-val" class="highlight">--</span></div>
+            
+            <div class="analytics-text">
+                <div class="analytics-item">95% Confidence Range: <span id="ci-val" class="highlight">--</span></div>
+                <div class="analytics-item">Margin of Error: <span id="me-val" class="highlight">--</span></div>
+                <div class="analytics-item">Tree Deviation Error: <span id="std-val" class="highlight">--</span></div>
+            </div>
+        </div>
+
+        <div class="disclaimer-section">
+            <strong>Disclaimer:</strong> This application relies on statistical machine learning patterns for estimation purposes. 
+            Due to the intrinsic nature of inductive modeling and variations in real-world environmental factors (such as ambient temperature 
+            and cell internal resistance), predictions may deviate from exact physical degradation metrics. Outputs should be treated as 
+            probabilistic indicators rather than absolute hardware guarantees.
         </div>
     </div>
 </div>
@@ -193,7 +307,6 @@
     document.getElementById('prediction-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        // Construct the raw payload from input elements
         const payload = {
             discharge_time: parseFloat(document.getElementById('discharge_time').value),
             decrement_range: parseFloat(document.getElementById('decrement_range').value),
@@ -213,15 +326,15 @@
 
             const data = await response.json();
             
-            // Render calculations into interface blocks
+            // Render text metrics clearly without loading any chart configurations
             document.getElementById('predicted-val').innerText = data['Predicted RUL'];
-            document.getElementById('ci-val').innerText = `[${data['Confidence Analytics']['95% Confidence Interval'].join(', ')}] cycles`;
+            document.getElementById('ci-val').innerText = `${data['Confidence Analytics']['95% Confidence Interval'][0]} to ${data['Confidence Analytics']['95% Confidence Interval'][1]} cycles`;
             document.getElementById('me-val').innerText = `±${data['Confidence Analytics']['Margin of Error (cycles)']} cycles`;
             document.getElementById('std-val').innerText = `${data['Confidence Analytics']['Model Disagreement Standard Deviation']} cycles`;
             
             document.getElementById('result-box').style.display = 'block';
         } catch (error) {
-            alert('Prediction error, check console metrics.');
+            alert('Prediction mapping parsing error.');
             console.error(error);
         }
     });
