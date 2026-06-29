@@ -8,12 +8,24 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 import numpy as np
 
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+
+
 #importing the ml model
 model = joblib.load('battery_rul_champion_rf.pkl')
 
 app = FastAPI(
     title="Battery Remaining Useful Life (RUL) Predictor",
     description="API to predict battery cycle degradation using optimized Random Forest regression."
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # Allows any site (including your Vercel link) to send data
+    allow_credentials=True,
+    allow_methods=["*"], # Allows POST, GET, OPTIONS requests
+    allow_headers=["*"],
 )
 
 templates = Jinja2Templates(directory="templates")
