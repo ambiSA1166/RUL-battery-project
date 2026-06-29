@@ -2,7 +2,8 @@
 
 An end-to-end Machine Learning web application that predicts the **Remaining Useful Life (RUL)** of lithium-ion batteries based on cycle-specific operational metrics. Built using an optimized Random Forest architecture and served via a high-performance FastAPI backend, the solution provides real-time inference accompanied by statistical uncertainty metrics (95% Confidence Intervals).
 
-🔗 **Live Application:** [Deploy Link](https://rul-battery-project.vercel.app)  
+🔗 **Live Application:** [Deploy Link Vercel](https://rul-battery-project.vercel.app)  
+🔗 **Live Application:** [Deploy Link Render](https://battery-rul-docker.onrender.com)  
 🐳 **Docker Image:** [`ambika1166/battery-predictor-app` on Docker Hub](https://hub.docker.com/r/ambika1166/battery-predictor-app)
 
 ---
